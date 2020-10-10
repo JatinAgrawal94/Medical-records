@@ -12,8 +12,10 @@ class _DoctorHomeState extends State<DoctorHome> {
       appBar: AppBar(
         title: Text('jatin'),
       ),
-      body: Center(
-        child: Text("This is the doctor"),
+      body: Container(
+        child: Center(
+          child: Text("This is the doctor"),
+        ),
       ),
     );
   }

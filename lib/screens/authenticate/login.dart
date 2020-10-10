@@ -1,4 +1,6 @@
 // Login page for app.
+import 'dart:convert';
+
 import 'package:careconnect/screens/authenticate/signup.dart';
 import 'package:careconnect/user/user.dart';
 import 'package:flutter/material.dart';
@@ -158,10 +160,11 @@ class LoginPageState extends State<LoginPage> {
                                           dynamic result = await _auth
                                               .signInWithEmailAndPassword(
                                                   email, password);
-                                          dynamic obj =
-                                              roles.getDataByDocumentId(
-                                                  'users', result.uid);
-
+                                          // dynamic obj =
+                                          //     await roles.getDataByDocumentId(
+                                          //         'users', result.uid);
+                                          // result.roleSet = obj['role'];
+                                          // print(result.roleGet);
                                           if (result == null) {
                                             setState(() {
                                               error = 'could not sign in';

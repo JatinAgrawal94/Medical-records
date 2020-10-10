@@ -9,12 +9,16 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-
     if (user == null) {
       print("User is $user");
       return Authenticate();
     } else {
-      return Home();
+      print(user.roleGet);
+      if (user.roleGet == 'doctor') {
+        return DoctorHome();
+      } else {
+        return Home();
+      }
     }
   }
 }

@@ -1,15 +1,16 @@
 import 'package:careconnect/user/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:careconnect/services/role_select.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final Firestore _firestore = Firestore.instance;
+  Roles roles = Roles();
+  String userRole;
 
   // user from firebase user
-  User _userFromFirebaseUser(FirebaseUser user, int check) {
+  User _userFromFirebaseUser(FirebaseUser user) {
     if (user != null) {
-      return User(uid: user.uid, email: user.email);
+      return User(uid: user.uid, email: user.email, role: userRole);
     } else {
       return null;
     }
@@ -19,7 +20,7 @@ class AuthService {
 
   Stream<User> get user {
     return _auth.onAuthStateChanged
-        .map((FirebaseUser user) => _userFromFirebaseUser(user, 0));
+        .map((FirebaseUser user) => _userFromFirebaseUser(user));
   }
 
   // signin anon
@@ -51,7 +52,7 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user, 1);
+      return _userFromFirebaseUser(user);
     } catch (e) {}
   }
 
@@ -61,7 +62,9 @@ class AuthService {
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user, 0);
+      dynamic obj = await roles.getDataByDocumentId('users', user.uid);
+      userRole = obj['role'];
+      return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;

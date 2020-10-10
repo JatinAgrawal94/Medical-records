@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:careconnect/user/user.dart';
 
 class Roles {
   Firestore _firestore = Firestore.instance;
@@ -11,12 +12,11 @@ class Roles {
             (value) => print("User added"));
   }
 
-  Future<Map<String, dynamic>> getDataByDocumentId(
-      String collection, String documentId) async {
+  Future getDataByDocumentId(String collection, String documentId) async {
     try {
       DocumentSnapshot query =
           await _firestore.collection(collection).document(documentId).get();
-      return query.data['role'];
+      return query.data;
     } catch (e) {
       print(e);
       return null;
