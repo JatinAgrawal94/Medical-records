@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:careconnect/user/user.dart';
 
 class Roles {
   Firestore _firestore = Firestore.instance;

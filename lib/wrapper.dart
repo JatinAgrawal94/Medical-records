@@ -13,7 +13,6 @@ class Wrapper extends StatelessWidget {
       print("User is $user");
       return Authenticate();
     } else {
-      print(user.roleGet);
       if (user.roleGet == 'doctor') {
         return DoctorHome();
       } else {

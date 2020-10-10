@@ -1,11 +1,15 @@
 import 'package:careconnect/user/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:careconnect/services/role_select.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:careconnect/services/role_select.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Roles roles = Roles();
-  String userRole;
+  static String userRole = "patient";
+  Firestore _firestore = Firestore.instance;
 
   // user from firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
@@ -59,17 +63,33 @@ class AuthService {
 //    signinwith email and password check 0
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
+      await authorizeAccess(email);
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
-      dynamic obj = await roles.getDataByDocumentId('users', user.uid);
-      userRole = obj['role'];
+
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
-}
 
+  // authorize
+  authorizeAccess(String email) async {
+    _firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .getDocuments()
+        .then((docs) {
+      if (docs.documents[0].exists) {
+        if (docs.documents[0].data['role'] == 'doctor') {
+          userRole = "doctor";
+        } else {
+          userRole = "patient";
+        }
+      }
+    });
+  }
 //leverages in progress
+}

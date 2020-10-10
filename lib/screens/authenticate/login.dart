@@ -160,11 +160,7 @@ class LoginPageState extends State<LoginPage> {
                                           dynamic result = await _auth
                                               .signInWithEmailAndPassword(
                                                   email, password);
-                                          // dynamic obj =
-                                          //     await roles.getDataByDocumentId(
-                                          //         'users', result.uid);
-                                          // result.roleSet = obj['role'];
-                                          // print(result.roleGet);
+
                                           if (result == null) {
                                             setState(() {
                                               error = 'could not sign in';
